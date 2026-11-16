@@ -16,6 +16,14 @@ RM564786 - 2TDSPJ
 
 RM564555 - 2TDSPJ
 
+#### NOME: Rafael Pascotte Mercadante
+
+RM564928
+
+#### NOME: Rafael de Freitas Moraes
+
+RM563210
+
 ---
 
 # 📌 Descrição do Projeto
