@@ -1,0 +1,57 @@
+services:
+  - type: web
+    name: servidor-eureka
+    runtime: docker
+    plan: free
+    rootDir: servidor-eureka
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    envVars:
+      - key: EUREKA_USERNAME
+        value: terrabyte
+      - key: EUREKA_PASSWORD
+        sync: false
+  - type: web
+    name: terrabyte-ia
+    runtime: docker
+    plan: free
+    rootDir: terrabyte-ia
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /actuator/health
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: render
+      - key: EUREKA_URL
+        sync: false
+      - key: AI_INTERNAL_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_MODEL
+        value: gpt-4o-mini
+  - type: web
+    name: terrabyte
+    runtime: docker
+    plan: free
+    rootDir: terrabyte
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /actuator/health
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: oracle,microservices,render
+      - key: EUREKA_URL
+        sync: false
+      - key: AI_INTERNAL_KEY
+        sync: false
+      - key: JWT_KEY
+        sync: false
+      - key: OPENAI_MODEL
+        value: gpt-4o-mini
+      - key: ORACLE_URL
+        sync: false
+      - key: ORACLE_USERNAME
+        sync: false
+      - key: ORACLE_PASSWORD
+        sync: false
+      - key: CORS_ALLOWED_ORIGINS
+        sync: false

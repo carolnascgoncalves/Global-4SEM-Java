@@ -1,0 +1,39 @@
+services:
+  eureka:
+    build: ./servidor-eureka
+    environment:
+      EUREKA_USERNAME: ${EUREKA_USERNAME:-terrabyte}
+      EUREKA_PASSWORD: ${EUREKA_PASSWORD:?configure EUREKA_PASSWORD}
+    ports:
+      - "8761:8761"
+  ia:
+    build: ./terrabyte-ia
+    environment:
+      EUREKA_URL: http://${EUREKA_USERNAME:-terrabyte}:${EUREKA_PASSWORD}@eureka:8761/eureka/
+      AI_INTERNAL_KEY: ${AI_INTERNAL_KEY:?configure AI_INTERNAL_KEY}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:?configure OPENAI_API_KEY}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o-mini}
+    depends_on:
+      - eureka
+  api:
+    build: ./terrabyte
+    environment:
+      SPRING_PROFILES_ACTIVE: oracle,microservices,bootstrap
+      ORACLE_URL: ${ORACLE_URL:?configure ORACLE_URL}
+      ORACLE_USERNAME: ${ORACLE_USERNAME:?configure ORACLE_USERNAME}
+      ORACLE_PASSWORD: ${ORACLE_PASSWORD:?configure ORACLE_PASSWORD}
+      JWT_KEY: ${JWT_KEY:?configure JWT_KEY}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o-mini}
+      AI_INTERNAL_KEY: ${AI_INTERNAL_KEY}
+      EUREKA_URL: http://${EUREKA_USERNAME:-terrabyte}:${EUREKA_PASSWORD}@eureka:8761/eureka/
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+      DEMO_USER_EMAIL: ${DEMO_USER_EMAIL:-}
+      DEMO_USER_PASSWORD: ${DEMO_USER_PASSWORD:-}
+      DEMO_DATA_ENABLED: ${DEMO_DATA_ENABLED:-false}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-}
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka
+      - ia

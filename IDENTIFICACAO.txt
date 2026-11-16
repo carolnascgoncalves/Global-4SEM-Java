@@ -1,0 +1,16 @@
+FIAP | Global Solution 2026/2 | CitizenTech
+Disciplina: Java Advanced
+Projeto: TerraByte - backend Java do aplicativo AgroConnect
+
+Integrantes transcritos da referencia C#; conferir antes da entrega:
+Rafael Pascotte Mercadante | RM564928 | 2TDSPI
+Rafael de Freitas Moraes | RM563210 | 2TDSPI
+Carolina nascimento goncalves | RM564786 | 2TDSPI
+Emanuelly ventura do nascimento | RM562339 | 2TDSPI
+Julia Sayuri Kina | RM564555 | 2TDSPI
+
+Repositorio Java publico: PENDENTE
+API publicada: PENDENTE
+Video pitch (ate 5 minutos): PENDENTE
+
+Declaracao de uso de IA: README.md
