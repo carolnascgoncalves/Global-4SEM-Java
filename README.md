@@ -631,5 +631,3 @@ Referência de integração: [repositório C# do grupo](https://github.com/Emanu
 # 🤖 Declaração de uso de IA
 
 O produto utiliza Spring AI com OpenAI para gerar recomendações agrícolas a partir do contexto de dispositivos, alertas, leituras e plantios. Os dados simulados da demonstração são identificados como tal, e as orientações geradas precisam de conferência humana. Chaves e credenciais de autenticação não são enviadas ao modelo.
-
-Foi utilizada assistência do ChatGPT/Codex no desenvolvimento, revisão, testes e documentação do backend Java. A equipe é responsável por revisar o código e os textos, compreender a implementação e validar o funcionamento da solução.
