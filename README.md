@@ -81,9 +81,11 @@ O aplicativo acessa apenas a API principal. A chave interna e a chave OpenAI per
 
 # 🚀 Link do Deploy
 
-**Pendente: preencher com a URL desta versão após a publicação no Render.**
+**API Java publicada:** [https://terrabyte-m1et.onrender.com](https://terrabyte-m1et.onrender.com)
 
-Serão publicados três serviços: `servidor-eureka`, `terrabyte-ia` e `terrabyte`. A URL entregue ao aplicativo será a do serviço `terrabyte`, com o prefixo `/api/v1`.
+**Base para integração web e mobile:** `https://terrabyte-m1et.onrender.com/api/v1`
+
+Os três serviços foram publicados separadamente: `servidor-eureka`, `terrabyte-ia` e `terrabyte`. As integrações web e mobile devem utilizar a base pública da API principal indicada acima.
 
 O passo a passo está em [docs/RENDER.md](docs/RENDER.md).
 
@@ -91,15 +93,21 @@ O passo a passo está em [docs/RENDER.md](docs/RENDER.md).
 
 # 📚 Documentação da API
 
-| Recurso | Endereço local |
+| Recurso | Endereço publicado |
 | --- | --- |
-| Swagger UI | [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html) |
-| OpenAPI JSON | [http://localhost:8080/v3/api-docs/terrabyte-v1](http://localhost:8080/v3/api-docs/terrabyte-v1) |
-| API base | `http://localhost:8080/api/v1` |
-| Saúde da API | [http://localhost:8080/actuator/health](http://localhost:8080/actuator/health) |
-| Painel Eureka | [http://localhost:8761/](http://localhost:8761/) |
+| Swagger UI | [Abrir Swagger](https://terrabyte-m1et.onrender.com/swagger-ui/index.html) |
+| OpenAPI JSON | [Abrir especificação OpenAPI](https://terrabyte-m1et.onrender.com/v3/api-docs/terrabyte-v1) |
+| API base | `https://terrabyte-m1et.onrender.com/api/v1` |
+| Saúde da API | [Consultar saúde da API](https://terrabyte-m1et.onrender.com/actuator/health) |
+| Painel Eureka | [Abrir Eureka](https://servidor-eureka-peki.onrender.com/) — exige autenticação |
 
-Após o deploy, substitua `http://localhost:8080` pela URL pública da API. O Swagger apresenta os DTOs, parâmetros e respostas completos de cada operação.
+Para executar localmente, utilize `http://localhost:8080` no lugar de `https://terrabyte-m1et.onrender.com`. O Swagger apresenta os DTOs, parâmetros e respostas completos de cada operação.
+
+Exemplo de login na API publicada:
+
+```text
+POST https://terrabyte-m1et.onrender.com/api/v1/auth/login
+```
 
 ---
 
@@ -589,9 +597,9 @@ Também é possível executar `.\mvnw.cmd verify` dentro de cada projeto.
 
 Os testes verificam CRUDs, paginação, isolamento entre usuários, JWT, papéis, validação, idempotência, fluxo de IA e comparação do contrato C# com o Swagger Java. Eles usam H2 e modelos controlados, sem consumir créditos OpenAI. O teste de persistência em modo Oracle usa H2 e não substitui a execução com Oracle real.
 
-Na revisão foram executados **87 testes sem falhas ou erros**: 83 da API, dois da IA e dois do Eureka. A etapa posterior de empacotamento executável ficou pendente por dependências ausentes no cache e indisponibilidade de acesso ao Maven Central naquele ambiente. O build completo e o deploy ainda precisam de confirmação.
+Na revisão foram executados **87 testes sem falhas ou erros**: 83 da API, dois da IA e dois do Eureka. O empacotamento local encontrou dependências ausentes no cache e indisponibilidade de acesso ao Maven Central naquele ambiente. Posteriormente, os três serviços foram publicados no Render, e o login pela API publicada foi validado pelo Swagger.
 
-A conexão real com Oracle e a geração real com OpenAI serão conferidas no ambiente publicado. O teste no aplicativo será feito pelo responsável pelo mobile após receber a URL da API.
+O login no ambiente publicado foi confirmado. A geração real de recomendações com OpenAI ainda precisa ser validada; a disponibilidade do serviço de IA e seu registro no Eureka não comprovam uma geração pelo modelo. O teste no aplicativo será feito pelo responsável pelo mobile com a URL pública da API.
 
 ---
 
@@ -599,8 +607,8 @@ A conexão real com Oracle e a geração real com OpenAI serão conferidas no am
 
 | Item | Situação |
 | --- | --- |
-| Repositório Java público desta versão | Pendente: preencher a URL |
-| Deploy da API | Pendente: preencher após publicar |
+| Repositório Java desta versão | [Global-4SEM-Java](https://github.com/carolnascgoncalves/Global-4SEM-Java) |
+| Deploy da API | [TerraByte no Render](https://terrabyte-m1et.onrender.com) |
 | Vídeo de apresentação | Pendente: preencher o link |
 | Pitch de até 5 minutos | Pendente: preencher o link |
 | TXT de identificação | [IDENTIFICACAO.txt](IDENTIFICACAO.txt): conferir os integrantes e atualizar os links antes da entrega |
