@@ -1,4 +1,4 @@
-# 🌱 TerraByte – Backend Java Spring Boot
+# 🌱 AgroConnect – Backend Java Spring Boot
 
 ## Global Solution – 2026 | CitizenTech
 
@@ -6,29 +6,29 @@
 
 #### NOME: Emanuelly Ventura Do Nascimento
 
-RM562339 - 2TDSPJ
+RM562339 - 2TDSPI
 
 #### NOME: Carolina Nascimento Gonçalves
 
-RM564786 - 2TDSPJ
+RM564786 - 2TDSPI
 
 #### NOME: Julia Sayuri Kina
 
-RM564555 - 2TDSPJ
+RM564555 - 2TDSPI
 
 #### NOME: Rafael Pascotte Mercadante
 
-RM564928
+RM564928 - 2TDSPI
 
 #### NOME: Rafael de Freitas Moraes
 
-RM563210
+RM563210 - 2TDSPI
 
 ---
 
 # 📌 Descrição do Projeto
 
-O TerraByte é uma solução agrícola desenvolvida com Java e Spring Boot para auxiliar no acompanhamento de hortas e pequenas plantações. O sistema organiza propriedades, talhões, plantios, dispositivos e sensores, permitindo consultar leituras ambientais, acompanhar alertas e obter recomendações contextualizadas com inteligência artificial generativa.
+O AgroConnect é uma solução agrícola desenvolvida com Java e Spring Boot para auxiliar no acompanhamento de hortas e pequenas plantações. O sistema organiza propriedades, talhões, plantios, dispositivos e sensores, permitindo consultar leituras ambientais, acompanhar alertas e obter recomendações contextualizadas com inteligência artificial generativa.
 
 A API foi preparada para ser consumida pelo aplicativo mobile. Os caminhos e nomes dos campos JSON seguem o contrato AgroConnect utilizado pelo backend C# do grupo, mantendo informações como `deviceId`, `fieldId`, `cropName` e `accessToken`.
 
@@ -44,24 +44,24 @@ A pasta externa apenas reúne os projetos e a documentação. Não existe um POM
 
 | Projeto | Responsabilidade | Porta local | Classe principal |
 | --- | --- | --- | --- |
-| `terrabyte` | API REST, autenticação, autorização, persistência e coordenação das recomendações | 8080 | `TerraByteApiApplication` |
-| `terrabyte-ia` | Geração de recomendações com Spring AI e OpenAI | 8082 | `TerraByteIaApplication` |
+| `agroconnect` | API REST, autenticação, autorização, persistência e coordenação das recomendações | 8080 | `TerraByteApiApplication` |
+| `agroconnect-ia` | Geração de recomendações com Spring AI e OpenAI | 8082 | `TerraByteIaApplication` |
 | `servidor-eureka` | Registro e descoberta dos serviços | 8761 | `TerraByteEurekaApplication` |
 
 ## 📂 Estrutura dos projetos
 
 | Local | Conteúdo |
 | --- | --- |
-| `terrabyte/src/main/java/br/com/fiap/terrabyte_api/config` | Configurações da API, OpenAPI e persistência |
-| `terrabyte/src/main/java/br/com/fiap/terrabyte_api/control` | Controllers REST e tratamento global de erros |
-| `terrabyte/src/main/java/br/com/fiap/terrabyte_api/model` | Entidades e enumerações do domínio |
-| `terrabyte/src/main/java/br/com/fiap/terrabyte_api/record` | DTOs de entrada, saída e paginação |
-| `terrabyte/src/main/java/br/com/fiap/terrabyte_api/repository` | Repositórios Spring Data JPA |
-| `terrabyte/src/main/java/br/com/fiap/terrabyte_api/security` | JWT, sessões, papéis e configurações de segurança |
-| `terrabyte/src/main/java/br/com/fiap/terrabyte_api/service` | Regras de negócio e cliente OpenFeign |
-| `terrabyte/src/main/java/br/com/fiap/terrabyte_api/validation` | Validações complementares dos DTOs |
-| `terrabyte/src/main/resources` | Configurações, migrations, mapeamento Oracle e prompts |
-| `terrabyte-ia/src/main` | Aplicação de IA, endpoint interno, DTOs, serviço e prompt agrícola |
+| `agroconnect/src/main/java/br/com/fiap/agroconnect_api/config` | Configurações da API, OpenAPI e persistência |
+| `agroconnect/src/main/java/br/com/fiap/agroconnect_api/control` | Controllers REST e tratamento global de erros |
+| `agroconnect/src/main/java/br/com/fiap/agroconnect_api/model` | Entidades e enumerações do domínio |
+| `agroconnect/src/main/java/br/com/fiap/agroconnect_api/record` | DTOs de entrada, saída e paginação |
+| `agroconnect/src/main/java/br/com/fiap/agroconnect_api/repository` | Repositórios Spring Data JPA |
+| `agroconnect/src/main/java/br/com/fiap/agroconnect_api/security` | JWT, sessões, papéis e configurações de segurança |
+| `agroconnect/src/main/java/br/com/fiap/agroconnect_api/service` | Regras de negócio e cliente OpenFeign |
+| `agroconnect/src/main/java/br/com/fiap/agroconnect_api/validation` | Validações complementares dos DTOs |
+| `agroconnect/src/main/resources` | Configurações, migrations, mapeamento Oracle e prompts |
+| `agroconnect-ia/src/main` | Aplicação de IA, endpoint interno, DTOs, serviço e prompt agrícola |
 | `servidor-eureka/src/main` | Aplicação Eureka, segurança e endpoint de saúde |
 | `database` | Scripts SQL do projeto |
 | `docs` | Guias de banco, execução, testes, IA e Render |
@@ -73,7 +73,7 @@ A pasta externa apenas reúne os projetos e a documentação. Não existe um POM
 
 **Opção escolhida no requisito 5: B – microsserviços com Eureka e OpenFeign.**
 
-A API principal e o serviço de IA se registram no Eureka. Quando o usuário solicita recomendações, a API reúne o contexto do dispositivo e localiza `terrabyte-ia` pelo registro. A comunicação entre os serviços utiliza OpenFeign e o endpoint `POST /internal/recommendations`, protegido por uma chave interna.
+A API principal e o serviço de IA se registram no Eureka. Quando o usuário solicita recomendações, a API reúne o contexto do dispositivo e localiza `agroconnect-ia` pelo registro. A comunicação entre os serviços utiliza OpenFeign e o endpoint `POST /internal/recommendations`, protegido por uma chave interna.
 
 O aplicativo acessa apenas a API principal. A chave interna e a chave OpenAI permanecem no servidor.
 
@@ -158,7 +158,7 @@ A senha deve ter entre 8 e 128 caracteres. O exemplo representa uma conta a ser 
 
 ```json
 {
-  "email": "produtor@terrabyte.test",
+  "email": "produtor@agroconnect.test",
   "password": "SenhaDeExemplo123!"
 }
 ```
@@ -179,8 +179,8 @@ Exemplo de atualização do perfil:
 
 ```json
 {
-  "name": "Produtor TerraByte",
-  "email": "produtor@terrabyte.test"
+  "name": "Produtor AgroConnect",
+  "email": "produtor@agroconnect.test"
 }
 ```
 
@@ -432,7 +432,7 @@ O Maven Wrapper está incluído em cada projeto. Não é necessário instalar Ma
 
 ## 📥 Obter e importar os projetos
 
-Baixe ou clone o repositório desta versão e entre na pasta que contém `terrabyte`, `terrabyte-ia` e `servidor-eureka`. O link público do repositório Java deve ser preenchido na seção de entrega após a publicação.
+Baixe ou clone o repositório desta versão e entre na pasta que contém `agroconnect`, `agroconnect-ia` e `servidor-eureka`. O link público do repositório Java deve ser preenchido na seção de entrega após a publicação.
 
 No Eclipse, utilize **File → Import → Maven → Existing Maven Projects**, selecione a pasta externa e marque os três projetos. Configure o JDK 21. Não importe a pasta externa como um projeto Java único.
 
@@ -442,7 +442,7 @@ As instruções de atualização das referências antigas estão em [docs/ECLIPS
 
 Configure em **Run Configurations → Environment** ou no terminal que executará cada aplicação.
 
-| Variável | API `terrabyte` | `terrabyte-ia` | `servidor-eureka` |
+| Variável | API `agroconnect` | `agroconnect-ia` | `servidor-eureka` |
 | --- | --- | --- | --- |
 | `SPRING_PROFILES_ACTIVE` | `oracle,microservices` | Não precisa para execução local | Não precisa para execução local |
 | `ORACLE_URL` | `jdbc:oracle:thin:@oracle.fiap.com.br:1521:orcl` | — | — |
@@ -451,7 +451,7 @@ Configure em **Run Configurations → Environment** ou no terminal que executar�
 | `JWT_KEY` | Segredo de pelo menos 32 bytes | — | — |
 | `AI_INTERNAL_KEY` | Segredo de pelo menos 32 caracteres | Mesmo valor da API | — |
 | `EUREKA_PASSWORD` | Senha do registro | Mesma senha | Mesma senha, pelo menos 32 caracteres |
-| `EUREKA_USERNAME` | — | — | `terrabyte` |
+| `EUREKA_USERNAME` | — | — | `agroconnect` |
 | `OPENAI_API_KEY` | — | Chave OpenAI | — |
 | `OPENAI_MODEL` | `gpt-4o-mini` | Mesmo modelo da API | — |
 | `CORS_ALLOWED_ORIGINS` | Origens web autorizadas, separadas por vírgula, se necessário | — | — |
@@ -482,11 +482,11 @@ Para desenvolvimento descartável, utilize o perfil `dev`, que executa migration
 
 Inicie nesta ordem:
 
-1. `br.com.fiap.terrabyte_eureka.TerraByteEurekaApplication`.
-2. `br.com.fiap.terrabyte_ia.TerraByteIaApplication`.
-3. `br.com.fiap.terrabyte_api.TerraByteApiApplication`.
+1. `br.com.fiap.terrabyte_eureka.AgroConnectEurekaApplication`.
+2. `br.com.fiap.terrabyte_ia.AgroConnectIaApplication`.
+3. `br.com.fiap.terrabyte_api.AgroConnectApiApplication`.
 
-Acesse o painel Eureka com usuário `terrabyte` e a senha configurada. Aguarde a API e a IA aparecerem no registro antes de gerar recomendações.
+Acesse o painel Eureka com usuário `agroconnect` e a senha configurada. Aguarde a API e a IA aparecerem no registro antes de gerar recomendações.
 
 ## ▶️ Executar pelo terminal
 
@@ -503,7 +503,7 @@ java -jar target/servidor-eureka-0.0.1-SNAPSHOT.jar
 ### Terminal 2 – IA
 
 ```powershell
-cd terrabyte-ia
+cd agroconnect-ia
 .\mvnw.cmd package
 java -jar target/terrabyte-ia-0.0.1-SNAPSHOT.jar
 ```
@@ -511,7 +511,7 @@ java -jar target/terrabyte-ia-0.0.1-SNAPSHOT.jar
 ### Terminal 3 – API
 
 ```powershell
-cd terrabyte
+cd agroconnect
 .\mvnw.cmd package
 java -jar target/terrabyte-0.0.1-SNAPSHOT.jar
 ```
@@ -544,7 +544,7 @@ Não há senha fixa de administrador no código. Para provisionar contas de demo
 | `DEMO_USER_EMAIL` e `DEMO_USER_PASSWORD` | Criam uma conta USER, se ainda não existir |
 | `DEMO_DATA_ENABLED=true` | Cria a base agrícola simulada vinculada ao usuário de demonstração |
 
-Exemplos de e-mail: `admin@terrabyte.test` e `demo@agroconnect.com`. Defina senhas de 8 a 128 caracteres e informe ao avaliador as credenciais efetivamente provisionadas. As contas dos scripts SQL não representam credenciais prontas para login.
+Exemplos de e-mail: `admin@agroconnect.test` e `demo@agroconnect.com`. Defina senhas de 8 a 128 caracteres e informe ao avaliador as credenciais efetivamente provisionadas. As contas dos scripts SQL não representam credenciais prontas para login.
 
 O bootstrap não redefine a senha de contas existentes nem altera seu papel. Após criar as contas, remova o perfil `bootstrap` e as senhas de provisionamento. Cadastros públicos recebem sempre o papel USER.
 
@@ -608,9 +608,8 @@ O login no ambiente publicado foi confirmado. A geração real de recomendaçõe
 | Item | Situação |
 | --- | --- |
 | Repositório Java desta versão | [Global-4SEM-Java](https://github.com/carolnascgoncalves/Global-4SEM-Java) |
-| Deploy da API | [TerraByte no Render](https://terrabyte-m1et.onrender.com) |
-| Vídeo de apresentação | Pendente: preencher o link |
-| Pitch de até 5 minutos | Pendente: preencher o link |
+| Deploy da API | [AgroConnect no Render](https://terrabyte-m1et.onrender.com) |
+| Pitch de até 5 minutos | [Vídeo Pitch](https://www.youtube.com/watch?v=XVS_kueprfs) |
 | TXT de identificação | [IDENTIFICACAO.txt](IDENTIFICACAO.txt): conferir os integrantes e atualizar os links antes da entrega |
 
 A entrega solicitada contém um ZIP com o TXT de identificação e os links do repositório e do vídeo. Não inclua `.env`, senhas, tokens, logs, configurações locais da IDE ou diretórios `target`.
@@ -623,8 +622,6 @@ A entrega solicitada contém um ZIP com o TXT de identificação e os links do r
 | [Testes](docs/TESTES.md) | Roteiro de verificação da API |
 | [Spring AI](docs/SPRING_AI.md) | Fluxo de geração das recomendações |
 | [Revisão](docs/REVISAO.md) | Requisitos da disciplina e evidências |
-
-Referência de integração: [repositório C# do grupo](https://github.com/Emanuelly0ventura/GS_DotNet), commit `e0afc71888067fa8693e57521a6a1b1c32f5eb99`. A comparação cobre os nomes e formatos públicos do contrato; não implica equivalência de todas as funcionalidades internas do C#.
 
 ---
 
