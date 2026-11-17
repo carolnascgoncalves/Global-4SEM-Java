@@ -1,4 +1,4 @@
-# Publicar o TerraByte no Render
+# Publicar o AgroConnect no Render
 
 O aplicativo deve consumir apenas a URL pública de `terrabyte`, com o prefixo `/api/v1`. Os outros dois serviços fazem parte da arquitetura exigida no trabalho.
 
@@ -10,8 +10,8 @@ O aplicativo deve consumir apenas a URL pública de `terrabyte`, com o prefixo `
 | Serviço | Root Directory | Dockerfile | Health Check |
 | --- | --- | --- | --- |
 | servidor-eureka | servidor-eureka | ./Dockerfile | /health |
-| terrabyte-ia | terrabyte-ia | ./Dockerfile | /actuator/health |
-| terrabyte | terrabyte | ./Dockerfile | /actuator/health |
+| terrabyte-ia | agroconnect-ia | ./Dockerfile | /actuator/health |
+| terrabyte | agroconnect | ./Dockerfile | /actuator/health |
 
 Use JDK 21 nas imagens Docker já fornecidas. Não configure comando Maven ou start command no painel: o Dockerfile cuida disso.
 

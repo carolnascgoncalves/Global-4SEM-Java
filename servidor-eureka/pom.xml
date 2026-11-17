@@ -12,7 +12,7 @@
 	<artifactId>servidor-eureka</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>servidor-eureka</name>
-	<description>TerraByte - monitoramento agricola</description>
+	<description>AgroConnect - monitoramento agricola</description>
 	<url/>
 	<licenses>
 		<license/>

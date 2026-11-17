@@ -15,7 +15,7 @@ services:
     name: terrabyte-ia
     runtime: docker
     plan: free
-    rootDir: terrabyte-ia
+    rootDir: agroconnect-ia
     dockerfilePath: ./Dockerfile
     healthCheckPath: /actuator/health
     envVars:
@@ -33,7 +33,7 @@ services:
     name: terrabyte
     runtime: docker
     plan: free
-    rootDir: terrabyte
+    rootDir: agroconnect
     dockerfilePath: ./Dockerfile
     healthCheckPath: /actuator/health
     envVars:

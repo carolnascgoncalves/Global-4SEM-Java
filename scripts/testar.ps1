@@ -1,6 +1,6 @@
 $ErrorActionPreference = 'Stop'
 $taskRoot = Split-Path -Parent $PSScriptRoot
-foreach ($module in @('terrabyte', 'terrabyte-ia', 'servidor-eureka')) {
+foreach ($module in @('agroconnect', 'agroconnect-ia', 'servidor-eureka')) {
     Push-Location (Join-Path $taskRoot $module)
     try {
         & .\mvnw.cmd verify

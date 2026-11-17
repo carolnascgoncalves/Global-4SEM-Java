@@ -381,6 +381,28 @@ Os filtros obrigatórios e os corpos dos recursos complementares estão descrito
 
 `POST /api/v1/me/push-tokens` registra o token Expo associado à sessão e retorna 204.
 
+
+
+## Notificações push de alertas
+
+O envio ao Expo ocorre em uma fila assíncrona limitada, somente após o commit de um alerta novo WARNING ou CRITICAL. INFO, edições e marcação de leitura não enviam push. Somente tokens do dono, associados a sessões não expiradas, são consultados. O payload usa channelId `alerts`, sound `default` e data `{ "alertId": "<uuid>", "type": "ALERT" }`.
+
+As chamadas contêm até 100 mensagens. Tickets DeviceNotRegistered removem o token; outros erros são registrados sem token completo ou corpo da resposta. Falhas de rede, do Expo ou fila cheia não desfazem o alerta. Configure `EXPO_ACCESS_TOKEN` apenas quando a segurança avançada Expo estiver habilitada; no Compose a variável é repassada à API. No Render configure-a no painel quando necessário.
+
+Proteção contra repetição: um alerta é processado uma vez por instância em uma janela de 24 horas, e cada registro de aparelho recebe no máximo uma tentativa a cada 30 segundos. Alertas adicionais nesse intervalo continuam no histórico, mas seu push é suprimido. Esse controle e a fila ficam em memória: reinícios descartam a fila e o controle; não há garantia durável, reenvio automático ou consulta posterior de receipts. Um ticket aceito pelo Expo não comprova entrega no aparelho.
+
+### Validação manual do push
+
+1. Publique a versão nova. No Render, ajuste **Root Directory** da API de `terrabyte` para `agroconnect`, e da IA de `terrabyte-ia` para `agroconnect-ia`. Nomes públicos, URLs, identificação Eureka e nomes de JAR permanecem compatíveis. O `render.yaml` e o Compose já apontam para as novas pastas.
+2. Use aparelho físico com APK, FCM configurado no EAS, login realizado e permissão aceita. Confirme o registro em `POST /api/v1/me/push-tokens` e na tabela PushTokens; Expo Go não serve para este teste.
+3. Autentique o Swagger como o mesmo usuário e crie `POST /api/v1/alerts` usando um dispositivo dessa conta e severidade WARNING (JSON de exemplo na seção Alertas). Espere a notificação e toque nela: a navegação para Alertas é responsabilidade do aplicativo mobile.
+4. Aguarde mais de 30 segundos e repita com CRITICAL. Teste INFO: deve salvar sem notificar. Atualize ou marque um alerta como lido: não deve reenviar.
+5. Crie dois alertas diferentes em sequência: ambos devem existir no histórico e apenas um push por aparelho deve ser tentado em 30 segundos. Para repetir exatamente a criação, use a mesma Idempotency-Key: não deve criar nem notificar duas vezes.
+6. Com duas contas e aparelhos, crie alerta na conta A e confirme que somente A recebe. Um dispositivo de B não pode ser usado por A. Após logout, o token daquela sessão não deve receber novos envios.
+7. Teste indisponibilidade do Expo em ambiente local: a criação deve continuar funcionando e o log deve indicar falha sem revelar tokens. Tokens DeviceNotRegistered e erros HTTP são cobertos por testes com HTTP simulado.
+
+A API gratuita do Render pode hibernar. A entrega real depende também da configuração FCM/APNs e do APK do grupo mobile. Não é necessário alterar o schema do banco para esta implementação.
+
 ## 📄 Paginação e respostas de erro
 
 Nas listagens paginadas, utilize `page` e `size`. A página começa em 1 e o tamanho máximo é 100.
@@ -426,7 +448,7 @@ O Maven Wrapper está incluído em cada projeto. Não é necessário instalar Ma
 
 ## 📥 Obter e importar os projetos
 
-Baixe ou clone o repositório desta versão e entre na pasta que contém `terrabyte`, `terrabyte-ia` e `servidor-eureka`. O link público do repositório Java deve ser preenchido na seção de entrega após a publicação.
+Baixe ou clone o repositório desta versão e entre na pasta que contém `agroconnect`, `agroconnect-ia` e `servidor-eureka`. O link público do repositório Java deve ser preenchido na seção de entrega após a publicação.
 
 No Eclipse, utilize **File → Import → Maven → Existing Maven Projects**, selecione a pasta externa e marque os três projetos. Configure o JDK 21. Não importe a pasta externa como um projeto Java único.
 
@@ -434,7 +456,7 @@ No Eclipse, utilize **File → Import → Maven → Existing Maven Projects**, s
 
 Configure em **Run Configurations → Environment** ou no terminal que executará cada aplicação.
 
-| Variável | API `terrabyte` | `terrabyte-ia` | `servidor-eureka` |
+| Variável | API `agroconnect` | `agroconnect-ia` | `servidor-eureka` |
 | --- | --- | --- | --- |
 | `SPRING_PROFILES_ACTIVE` | `oracle,microservices` | Não precisa para execução local | Não precisa para execução local |
 | `ORACLE_URL` | `jdbc:oracle:thin:@oracle.fiap.com.br:1521:orcl` | — | — |
@@ -474,9 +496,9 @@ Para desenvolvimento descartável, utilize o perfil `dev`, que executa migration
 
 Inicie nesta ordem:
 
-1. `br.com.fiap.terrabyte_eureka.TerraByteEurekaApplication`.
-2. `br.com.fiap.terrabyte_ia.TerraByteIaApplication`.
-3. `br.com.fiap.terrabyte_api.TerraByteApiApplication`.
+1. `br.com.fiap.agroconnect_eureka.AgroConnectEurekaApplication`.
+2. `br.com.fiap.agroconnect_ia.AgroConnectIaApplication`.
+3. `br.com.fiap.agroconnect_api.AgroConnectApiApplication`.
 
 Acesse o painel Eureka com usuário `terrabyte` e a senha configurada. Aguarde a API e a IA aparecerem no registro antes de gerar recomendações.
 
@@ -495,7 +517,7 @@ java -jar target/servidor-eureka-0.0.1-SNAPSHOT.jar
 ### Terminal 2 – IA
 
 ```powershell
-cd terrabyte-ia
+cd agroconnect-ia
 .\mvnw.cmd package
 java -jar target/terrabyte-ia-0.0.1-SNAPSHOT.jar
 ```
@@ -503,7 +525,7 @@ java -jar target/terrabyte-ia-0.0.1-SNAPSHOT.jar
 ### Terminal 3 – API
 
 ```powershell
-cd terrabyte
+cd agroconnect
 .\mvnw.cmd package
 java -jar target/terrabyte-0.0.1-SNAPSHOT.jar
 ```
@@ -553,9 +575,9 @@ O bootstrap não redefine a senha de contas existentes nem altera seu papel. Ap�
 - **Alertas e auditoria:** acompanhamento de ocorrências, classificação de severidade e marcação de leitura.
 - **Recomendações com IA:** orientações contextualizadas por dispositivo, com persistência e cache do contexto.
 - **Registros complementares:** eventos de dispositivos, histórico climático e interações de IA.
-- **Integração:** contrato REST compatível e registro de tokens Expo por sessão.
+- **Integração:** contrato REST compatível registro de tokens Expo por sessão e envio assíncrono de push para novos alertas relevantes.
 
-O ADMIN gerencia contas, mas não recebe acesso geral às plantações de outros usuários. O envio externo de notificações push ainda não está implementado no Java.
+O ADMIN gerencia contas, mas não recebe acesso geral às plantações de outros usuários. Alertas novos WARNING e CRITICAL enviam notificações pelo Expo após o commit.
 
 ---
 
@@ -589,7 +611,7 @@ Também é possível executar `.\mvnw.cmd verify` dentro de cada projeto.
 
 Os testes verificam CRUDs, paginação, isolamento entre usuários, JWT, papéis, validação, idempotência, fluxo de IA e comparação do contrato C# com o Swagger Java. Eles usam H2 e modelos controlados, sem consumir créditos OpenAI. O teste de persistência em modo Oracle usa H2 e não substitui a execução com Oracle real.
 
-Na revisão foram executados **87 testes sem falhas ou erros**: 83 da API, dois da IA e dois do Eureka. O empacotamento local encontrou dependências ausentes no cache e indisponibilidade de acesso ao Maven Central naquele ambiente. Posteriormente, os três serviços foram publicados no Render, e o login pela API publicada foi validado pelo Swagger.
+Na revisão de 17/11/2026 foram validados **96 testes sem falhas ou erros**: 92 da API (incluindo nove testes de push), dois da IA e dois do Eureka. A suíte existente da API e os testes novos de push foram executados localmente com HTTP simulado; não houve envio para aparelhos reais. Os três serviços já possuíam deploy no Render, mas esta atualização ainda precisa ser publicada e validada no APK.
 
 O login no ambiente publicado foi confirmado. A geração real de recomendações com OpenAI ainda precisa ser validada; a disponibilidade do serviço de IA e seu registro no Eureka não comprovam uma geração pelo modelo. O teste no aplicativo será feito pelo responsável pelo mobile com a URL pública da API.
 

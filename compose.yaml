@@ -7,7 +7,7 @@ services:
     ports:
       - "8761:8761"
   ia:
-    build: ./terrabyte-ia
+    build: ./agroconnect-ia
     environment:
       EUREKA_URL: http://${EUREKA_USERNAME:-terrabyte}:${EUREKA_PASSWORD}@eureka:8761/eureka/
       AI_INTERNAL_KEY: ${AI_INTERNAL_KEY:?configure AI_INTERNAL_KEY}
@@ -16,7 +16,7 @@ services:
     depends_on:
       - eureka
   api:
-    build: ./terrabyte
+    build: ./agroconnect
     environment:
       SPRING_PROFILES_ACTIVE: oracle,microservices,bootstrap
       ORACLE_URL: ${ORACLE_URL:?configure ORACLE_URL}
@@ -31,6 +31,7 @@ services:
       DEMO_USER_EMAIL: ${DEMO_USER_EMAIL:-}
       DEMO_USER_PASSWORD: ${DEMO_USER_PASSWORD:-}
       DEMO_DATA_ENABLED: ${DEMO_DATA_ENABLED:-false}
+      EXPO_ACCESS_TOKEN: ${EXPO_ACCESS_TOKEN:-}
       CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-}
     ports:
       - "8080:8080"
