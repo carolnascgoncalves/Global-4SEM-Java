@@ -41,10 +41,15 @@ public class RecommendationAiService {
 	private String systemPrompt;
 	private final JsonMapper mapper = JsonMapper.builder().build();
 	private final BeanOutputConverter<AiRecommendationBatch> converter = new BeanOutputConverter<>(AiRecommendationBatch.class);
+	
+	@Value("${spring.ai.openai.api-key:}")
+	private String apiKey;
 
 	@PostConstruct
 	public void initialize() throws IOException {
 		systemPrompt = instructions.getContentAsString(StandardCharsets.UTF_8);
+		LoggerFactory.getLogger(RecommendationAiService.class).info("OpenAI key: tamanho={}, final={}",
+			    apiKey.length(), apiKey.isEmpty() ? "-" : apiKey.substring(Math.max(0, apiKey.length() - 4)));
 	}
 
 	public String modelName() {
@@ -80,7 +85,7 @@ public class RecommendationAiService {
 					.call().content();
 		} catch (RuntimeException exception) {
 			LoggerFactory.getLogger(RecommendationAiService.class)
-					.warn("O provedor de IA falhou: {}", exception.getClass().getSimpleName());
+				.warn("O provedor de IA falhou: {} - {}", exception.getClass().getSimpleName(), exception.getMessage());
 			throw new ApiException(503, "AI_UNAVAILABLE", "Não foi possível consultar o modelo de IA. Tente novamente mais tarde.");
 		}
 		if (content == null || content.isBlank() || content.length() > 40000) throw invalidOutput();
